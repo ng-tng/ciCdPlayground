@@ -4,12 +4,17 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag to create (e.g., v1.0.0)'
+        required: false
+        type: string
   
 permissions:
   checks: write
   pull-requests: write
   id-token: write
-  contents: read
+  contents: write
   pages: write
 
 jobs:
@@ -44,3 +49,10 @@ jobs:
         files: |
           reports/cypress-junit.xml
         check_name: Integration Test Results
+    - name: Tag commit with version
+      if: github.event_name == 'workflow_dispatch' && inputs.version != ''
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git tag -a "${{ inputs.version }}" -m "Release ${{ inputs.version }}"
+        git push origin "${{ inputs.version }}"
