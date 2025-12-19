@@ -26,7 +26,21 @@ jobs:
       run: yarn
     - name: Unit tests
       run: yarn test
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: |
+          reports/jest-junit.xml
+        check_name: Unit Test Results
     - name: Build
       run: yarn build
     - name: Integration tests
       run: yarn test:e2e
+    - name: Publish Integration Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: |
+          reports/cypress-junit.xml
+        check_name: Integration Test Results
