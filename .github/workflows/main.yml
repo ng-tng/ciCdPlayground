@@ -28,7 +28,7 @@ jobs:
       run: yarn test
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()
+      if: success() || failure()
       with:
         files: |
           reports/jest-junit.xml
@@ -39,7 +39,7 @@ jobs:
       run: yarn test:e2e
     - name: Publish Integration Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()
+      if: success() || failure()
       with:
         files: |
           reports/cypress-junit.xml
